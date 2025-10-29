@@ -161,9 +161,9 @@ SDR asks 8 questions about company/product
   ↓
 [Phase 2: OAuth Setup Workflow]
 1. Generate OAuth URL
-2. User authorizes → paste code
+2. User authorizes → paste access & refresh tokens
 3. Test Sheets connection
-4. Return tokens
+4. Return confirmation
   ↓
 User: [provides Google Sheet link]
   ↓
@@ -265,9 +265,9 @@ One-time Google authentication (Sheets + Gmail).
 
 **Steps:**
 1. Generate OAuth URL
-2. Wait for authorization & exchange code (SUSPEND)
+2. Wait for user to paste access token & refresh token (SUSPEND)
 3. Test Sheets connection
-4. Generate report with tokens
+4. Generate report confirming setup
 
 **Duration:** ~2 minutes
 
@@ -336,7 +336,7 @@ User: "Yes, I want to analyze leads"
 
 # 6. Complete OAuth
 # Agent runs OAuth Setup Workflow
-# Click auth URL → authorize → paste code
+# Click auth URL → authorize → copy both tokens → paste tokens
 
 # 7. Provide Google Sheet
 User: "https://docs.google.com/spreadsheets/d/1ABC..."

@@ -92,8 +92,7 @@ When user confirms they have a spreadsheet OR asks to analyze leads:
 3. **Execute OAuth Setup Workflow:**
    - Call: \`oauthSetupWorkflow\`
    - Wait for workflow to complete
-   - When user provides authorization code, the workflow will handle token exchange
-   - Store returned tokens in working memory
+   - When user provides access token and refresh token, store them in working memory
 
 4. **After OAuth success:**
    "✅ Authentication successful! Your tokens are now stored securely.

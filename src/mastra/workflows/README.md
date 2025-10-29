@@ -37,8 +37,8 @@ One-time setup to authenticate with Google services (Sheets + Gmail) and obtain 
     │ Step 2: Wait for Authorization (SUSPEND)│
     │ - Shows URL to user                     │
     │ - User authorizes in browser            │
-    │ - User provides authorization code      │
-    │ - Workflow exchanges code for tokens    │
+    │ - Callback exchanges code for tokens    │
+    │ - User copies & pastes both tokens      │
     └────┬───────────────────────────────────┘
          │
     ┌────▼─────────────────────────────┐
@@ -89,19 +89,20 @@ One-time setup to authenticate with Google services (Sheets + Gmail) and obtain 
 
 ---
 
-#### **Step 2: Wait for Authorization & Exchange Code**
+#### **Step 2: Wait for Authorization**
 
 **Input:** From Step 1
 
 **Process:**
 1. **Suspends workflow** and shows auth URL to user
 2. User clicks URL → Google authorization page
-3. User authorizes → Google redirects with **authorization code**
-4. User pastes code back into workflow
-5. **Workflow automatically exchanges code for tokens:**
-   - Access token (valid ~1 hour)
-   - Refresh token (valid indefinitely)
-   - Expiry date
+3. User authorizes → Google redirects to callback route
+4. **Callback route automatically exchanges code for tokens** and displays them
+5. User clicks "Copy Both Tokens" and pastes back into workflow:
+   ```
+   Access Token: ya29.a0ATi6K2t...
+   Refresh Token: 1//0gXRPz9V8cXrq...
+   ```
 
 **Suspend Schema:**
 ```typescript
@@ -115,7 +116,8 @@ One-time setup to authenticate with Google services (Sheets + Gmail) and obtain 
 **Resume Schema:**
 ```typescript
 {
-  authorizationCode: string  // User provides this
+  accessToken: string         // User provides this
+  refreshToken?: string       // User provides this
 }
 ```
 
@@ -129,7 +131,7 @@ One-time setup to authenticate with Google services (Sheets + Gmail) and obtain 
 }
 ```
 
-**Important:** User provides **authorization code** (not tokens). Workflow does the exchange automatically.
+**Important:** User provides **both access and refresh tokens** (already exchanged by callback route).
 
 ---
 
@@ -226,7 +228,8 @@ const result = await mastra.workflows.oauthSetupWorkflow.execute({
 });
 
 // Workflow suspends, user authorizes
-// User provides authorization code
+// Callback exchanges code for tokens
+// User copies & pastes both tokens
 // Workflow resumes automatically
 
 console.log(result.summary);
@@ -239,16 +242,16 @@ const accessToken = result._accessToken;  // Use in next workflows
 ### Features
 
 - ✅ One-time setup (tokens last indefinitely with refresh)
-- ✅ Automatic code-to-token exchange
+- ✅ Automatic code-to-token exchange (handled by callback route)
 - ✅ Tests Sheets connection with real API call
-- ✅ Obfuscated tokens for security
+- ✅ User-friendly token copying (both tokens in one box)
 - ✅ Clear error messages for common issues
 
 ### Common Errors
 
 1. **Missing credentials**: Check `.env` file
-2. **Invalid redirect URI**: Must match Google Cloud Console
-3. **Code expired**: Generate new auth URL (codes expire in 10 min)
+2. **Invalid redirect URI**: Must match Google Cloud Console exactly
+3. **Token expired**: Re-run OAuth workflow (tokens last ~1 hour without refresh)
 4. **Sheets API not enabled**: Enable in Google Cloud Console
 
 ---
@@ -1123,9 +1126,9 @@ User: "Yes, analyze leads"
 ┌─────────────────────────┐
 │ 1. OAuth Setup Workflow │  ← One-time
 │    - Generate URL       │
-│    - Exchange code      │
+│    - Wait for tokens    │
 │    - Test Sheets        │
-│    - Return tokens      │
+│    - Confirm setup      │
 └──────────┬──────────────┘
            │ accessToken
 User: [provides sheet URL]
@@ -1228,8 +1231,8 @@ Workflows communicate via:
 | **Suspends** | 1x (auth) | 2x (structure, plan) | 1x (preview) |
 | **Parallel** | No | Yes (10x) | Yes (8x) |
 | **API Calls** | ~5 | ~700+ | ~130 |
-| **User Input** | Auth code | 2x confirmations | 1x confirmation |
-| **Output** | Tokens | Analyzed leads | Email results |
+| **User Input** | Access + Refresh tokens | 2x confirmations | 1x confirmation |
+| **Output** | Confirmation | Analyzed leads | Email results |
 
 ---
 

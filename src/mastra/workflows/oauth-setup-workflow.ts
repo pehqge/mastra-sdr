@@ -8,11 +8,13 @@ import { gmailSenderTool } from '../tools/gmail-sender';
  * 
  * Complete Google OAuth setup workflow following IMPLEMENTATION_PLAN.md:
  * 1. Generate OAuth URL
- * 2. Wait for user authorization & exchange code for tokens (SUSPEND)
+ * 2. Wait for user to paste access token and refresh token (SUSPEND)
  * 3. Test Sheets connection
  * 4. Generate success report with tokens
  * 
- * Note: Gmail connection is tested during actual email send (Email Dispatch Workflow)
+ * Note: The callback route automatically exchanges the authorization code for tokens
+ * and displays them to the user. User copies BOTH tokens and pastes here.
+ * Gmail connection is tested during actual email send (Email Dispatch Workflow)
  */
 
 // Step 1: Generate OAuth URL
@@ -60,7 +62,7 @@ const generateOAuthUrlStep = createStep({
     
     return {
       authUrl,
-      message: `🔐 OAuth Setup Iniciado!\n\n🔗 Acesse o link abaixo para autorizar:\n${authUrl}\n\n📋 Scopes solicitados:\n  • Google Sheets (leitura/escrita)\n  • Gmail (envio de emails)\n\n⚠️  Após autorizar, copie o Access Token exibido e cole quando solicitado.`,
+      message: `🔐 OAuth Setup Iniciado!\n\n🔗 Acesse o link abaixo para autorizar:\n${authUrl}\n\n📋 Scopes solicitados:\n  • Google Sheets (leitura/escrita)\n  • Gmail (envio de emails)\n\n⚠️  Após autorizar, você verá uma página com:\n  • Access Token: ya29...\n  • Refresh Token: 1//0g...\n\n📋 Clique em "Copy Both Tokens" e cole aqui quando solicitado.`,
       scopes,
     };
   },

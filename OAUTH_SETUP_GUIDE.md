@@ -77,15 +77,16 @@ GOOGLE_REDIRECT_URI=http://localhost:4111/auth/google/callback
 
 1. Start a conversation with the SDR Agent
 2. When you ask to access a Google Sheet, the agent will:
-   - Generate an OAuth link using the `google-oauth` tool
+   - Generate an OAuth link
    - Provide you with a link to click
 3. Click the link and authorize the application
-4. After authorization, you'll see a success page with an **access token**
-5. Copy the access token and paste it back to the agent:
+4. After authorization, you'll see a success page with both tokens in one text box:
    ```
-   "My access token is: ya29.a0AfH6SM..."
+   Access Token: ya29.a0AfH6SM...
+   Refresh Token: 1//0gXRPz9V8cXrq...
    ```
-6. The agent stores the token and uses it automatically for all future requests
+5. Copy BOTH tokens (click "Copy Both Tokens" button) and paste them back to the agent
+6. The agent stores the tokens and uses them automatically for all future requests
 
 ### OAuth Flow Diagram
 
@@ -94,7 +95,8 @@ User asks for sheet data
         ↓
 Agent checks for access token
         ↓
-    No token? → Generate OAuth link → User clicks → Authorizes → Gets token → Pastes to agent
+    No token? → Generate OAuth link → User clicks → Authorizes → 
+                Gets access & refresh tokens → Pastes BOTH to agent
         ↓
     Has token? → Use it to read Google Sheets
         ↓
