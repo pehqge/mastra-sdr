@@ -50,5 +50,6 @@ export const sdrAgent = new Agent({
   defaultGenerateOptions: {
     maxSteps: 10,
     temperature: 0.7,
+    maxRetries: 3,
   },
 });

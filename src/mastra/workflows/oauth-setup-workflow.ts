@@ -66,10 +66,10 @@ const generateOAuthUrlStep = createStep({
   },
 });
 
-// Step 2: Wait for Authorization & Exchange Code for Tokens (with SUSPEND)
+// Step 2: Wait for Authorization (with SUSPEND)
 const waitForAuthorizationStep = createStep({
   id: 'wait-authorization',
-  description: 'Wait for user to complete OAuth and exchange authorization code for tokens',
+  description: 'Wait for user to complete OAuth and provide access token',
   inputSchema: z.object({
     authUrl: z.string(),
     message: z.string(),
@@ -81,7 +81,8 @@ const waitForAuthorizationStep = createStep({
     scopes: z.array(z.string()),
   }),
   resumeSchema: z.object({
-    authorizationCode: z.string().describe('The authorization code from Google OAuth callback URL'),
+    accessToken: z.string(),
+    refreshToken: z.string().optional(),
   }),
   outputSchema: z.object({
     accessToken: z.string(),
@@ -90,80 +91,24 @@ const waitForAuthorizationStep = createStep({
     message: z.string(),
   }),
   execute: async ({ inputData, resumeData, suspend }) => {
-    const { authUrl, scopes } = inputData;
+    const { authUrl, message, scopes } = inputData;
     
-    if (!resumeData?.authorizationCode) {
+    if (!resumeData?.accessToken) {
       return await suspend({
         authUrl,
-        instructions: `🔐 Autenticação Google OAuth
-
-📋 **Instruções:**
-
-1️⃣  **Clique no link de autorização abaixo:**
-   ${authUrl}
-
-2️⃣  **Faça login e autorize** o acesso ao Google Sheets e Gmail
-
-3️⃣  **Copie o CÓDIGO DE AUTORIZAÇÃO** que aparece na URL após autorizar
-   - A URL será algo como: http://localhost:4111/auth/google/callback?code=XXXXX...
-   - Ou você verá o código na página de callback
-   
-4️⃣  **Cole o código de autorização aqui** para continuar
-
-⚠️  **IMPORTANTE:** Cole apenas o CÓDIGO (string longa), não o token completo.
-
-Exemplo de código: 4/0AeaYSHBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-`,
+        instructions: message,
         scopes,
       });
     }
     
-    const { authorizationCode } = resumeData;
+    const { accessToken, refreshToken } = resumeData;
     
-    console.log('\n🔄 Trocando código de autorização por tokens...');
-    
-    try {
-      // Exchange authorization code for access token + refresh token
-      const { google } = await import('googleapis');
-      
-      const oauth2Client = new google.auth.OAuth2(
-        process.env.GOOGLE_CLIENT_ID,
-        process.env.GOOGLE_CLIENT_SECRET,
-        process.env.GOOGLE_REDIRECT_URI || 'http://localhost:4111/auth/google/callback'
-      );
-      
-      const { tokens } = await oauth2Client.getToken(authorizationCode);
-      
-      if (!tokens.access_token) {
-        throw new Error('Falha ao obter access token. Código de autorização pode estar inválido ou expirado.');
-      }
-      
-      console.log('   ✅ Tokens obtidos com sucesso!');
-      console.log(`   • Access Token: ${tokens.access_token.substring(0, 10)}...`);
-      console.log(`   • Refresh Token: ${tokens.refresh_token ? '✅ Obtido' : '⚠️  Não obtido'}`);
-      console.log(`   • Expira em: ${tokens.expiry_date ? new Date(tokens.expiry_date).toLocaleString() : 'N/A'}`);
-      
-      return {
-        accessToken: tokens.access_token!,
-        refreshToken: tokens.refresh_token || undefined,
-        scopes,
-        message: '✅ Tokens obtidos com sucesso! Testando conexões...',
-      };
-      
-    } catch (error: any) {
-      console.error('❌ Erro ao trocar código por tokens:', error.message);
-      
-      // Better error messages for common issues
-      let errorMessage = error.message;
-      
-      if (error.message?.includes('invalid_grant')) {
-        errorMessage = 'Código de autorização inválido ou expirado. Por favor, gere um novo link de autorização e tente novamente.';
-      } else if (error.message?.includes('redirect_uri_mismatch')) {
-        errorMessage = 'Erro de configuração: Redirect URI não corresponde. Verifique GOOGLE_REDIRECT_URI no .env e no Google Cloud Console.';
-      }
-      
-      throw new Error(`Falha na troca de tokens: ${errorMessage}`);
-    }
+    return {
+      accessToken,
+      refreshToken,
+      scopes,
+      message: '✅ Tokens recebidos! Testando conexões...',
+    };
   },
 });
 

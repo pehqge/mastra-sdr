@@ -48,9 +48,8 @@ export const googleOAuthStartRoute = registerApiRoute('/auth/google/start', {
 });
 
 /**
- * OAuth callback - receives authorization code and displays it to user
- * User copies the code and pastes it into the OAuth Setup Workflow
- * The workflow will exchange the code for tokens automatically
+ * OAuth callback - receives code and exchanges for tokens
+ * Displays the access token for user to copy
  */
 export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback', {
   method: 'GET',
@@ -77,11 +76,25 @@ export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback'
       `);
     }
 
-    // Display the authorization code for user to copy
-    return c.html(`
+    try {
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        process.env.GOOGLE_REDIRECT_URI || 'http://localhost:4111/auth/google/callback'
+      );
+      
+      // Exchange code for tokens
+      const { tokens } = await oauth2Client.getToken(code);
+      
+      // For MVP, we'll display them to the user to paste into the agent
+      const accessToken = tokens.access_token;
+      const refreshToken = tokens.refresh_token;
+      const expiryDate = tokens.expiry_date;
+
+      return c.html(`
         <html>
           <head>
-            <title>OAuth Success - Copy Authorization Code</title>
+            <title>OAuth Success</title>
             <style>
               body { 
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -118,14 +131,6 @@ export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback'
                 margin: 20px 0;
                 border-radius: 4px;
               }
-              .instructions ol {
-                margin: 10px 0;
-                padding-left: 20px;
-              }
-              .instructions li {
-                margin: 8px 0;
-                line-height: 1.6;
-              }
               code { 
                 background-color: #f5f5f5; 
                 padding: 15px; 
@@ -134,10 +139,12 @@ export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback'
                 margin: 20px 0; 
                 word-break: break-all;
                 font-family: 'Courier New', monospace;
-                font-size: 13px;
+                font-size: 11px;
                 border: 2px solid #ddd;
                 color: #333;
                 line-height: 1.5;
+                max-height: 150px;
+                overflow-y: auto;
               }
               button { 
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -150,13 +157,11 @@ export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback'
                 font-weight: 600;
                 width: 100%;
                 transition: transform 0.2s;
+                margin-top: 10px;
               }
               button:hover { 
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-              }
-              button:active {
-                transform: translateY(0);
               }
               .copied {
                 background: #28a745 !important;
@@ -166,17 +171,9 @@ export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback'
                 0%, 100% { transform: scale(1); }
                 50% { transform: scale(1.05); }
               }
-              .warning {
-                background-color: #fff3cd;
-                border-left: 4px solid #ffc107;
-                padding: 15px;
-                margin: 20px 0;
-                border-radius: 4px;
-                color: #856404;
-              }
               .footer {
                 text-align: center;
-                margin-top: 30px;
+                margin-top: 20px;
                 color: #666;
                 font-size: 14px;
               }
@@ -185,53 +182,63 @@ export const googleOAuthCallbackRoute = registerApiRoute('/auth/google/callback'
           <body>
             <div class="container">
               <div class="success-icon">✅</div>
-              <h1>Google Authentication Successful!</h1>
+              <h1>Authentication Successful!</h1>
               
               <div class="instructions">
-                <strong>📋 Next Steps:</strong>
-                <ol>
-                  <li>Click the button below to <strong>copy the authorization code</strong></li>
-                  <li>Go back to the <strong>Mastra Playground</strong> (OAuth Setup Workflow)</li>
-                  <li><strong>Paste the code</strong> when prompted to resume the workflow</li>
-                  <li>The workflow will automatically exchange it for access tokens</li>
-                </ol>
+                <strong>📋 Instructions:</strong>
+                <p>Copy the tokens below (both access and refresh) and paste them back into the SDR Agent chat when prompted.</p>
               </div>
 
-              <p><strong>Your Authorization Code:</strong></p>
-              <code id="authCode">${code}</code>
-              
-              <button id="copyBtn" onclick="copyCode()">📋 Copy Authorization Code</button>
-
-              <div class="warning">
-                <strong>⚠️ Important:</strong> This code expires in 10 minutes. If the workflow fails, you'll need to restart the OAuth process.
-              </div>
+              <p><strong>Your Tokens (Copy Everything):</strong></p>
+              <code id="tokens">Access Token: ${accessToken}
+Refresh Token: ${refreshToken || 'N/A'}</code>
+              <button id="copyBtn" onclick="copyTokens()">📋 Copy Both Tokens</button>
 
               <div class="footer">
-                🔒 This code is safe to copy. It will be exchanged for secure tokens by the workflow.
+                🔒 Keep these tokens secure. Valid until: ${expiryDate ? new Date(expiryDate).toLocaleString() : 'N/A'}
               </div>
             </div>
             <script>
-              function copyCode() {
-                const code = document.getElementById('authCode').innerText;
+              function copyTokens() {
+                const tokens = document.getElementById('tokens').innerText;
                 const btn = document.getElementById('copyBtn');
                 
-                navigator.clipboard.writeText(code).then(() => {
-                  btn.innerText = '✅ Copied! Paste it in the workflow';
+                navigator.clipboard.writeText(tokens).then(() => {
+                  btn.innerText = '✅ Copied!';
                   btn.classList.add('copied');
                   
                   setTimeout(() => {
-                    btn.innerText = '📋 Copy Again';
+                    btn.innerText = '📋 Copy Both Tokens';
                     btn.classList.remove('copied');
                   }, 3000);
                 }).catch(err => {
-                  console.error('Failed to copy: ', err);
-                  alert('Failed to copy. Please manually select and copy the code above.');
+                  alert('Failed to copy. Please manually select and copy the tokens above.');
                 });
               }
             </script>
           </body>
         </html>
       `);
+    } catch (error: any) {
+      console.error('Error exchanging code for tokens:', error);
+      return c.html(`
+        <html>
+          <head>
+            <style>
+              body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f8d7da; color: #721c24; text-align: center; }
+              .container { padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; background-color: #f8d7da; max-width: 600px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>Authentication Error</h1>
+              <p>${error.message}</p>
+              <p>Please check your environment variables and Google Cloud Console settings.</p>
+            </div>
+          </body>
+        </html>
+      `);
+    }
   },
 });
 
