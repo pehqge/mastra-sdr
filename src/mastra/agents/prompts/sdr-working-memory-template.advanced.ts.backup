@@ -1,0 +1,271 @@
+/**
+ * SDR Agent Working Memory Template
+ * 
+ * Template estruturado para working memory thread-scoped.
+ * O arquivo .md original está mantido para documentação.
+ */
+
+export const sdrWorkingMemoryTemplate = `# Working Memory Template - SDR Agent
+
+> This working memory is **thread-scoped**, meaning each conversation thread maintains its own independent context. This allows you to manage multiple companies, products, or campaigns simultaneously in separate threads.
+
+---
+
+## 🏢 COMPANY PROFILE
+
+### Basic Information
+- **Company Name**: 
+- **Industry/Vertical**: 
+- **Company Size**: [Employees/Revenue]
+- **Stage**: [Startup/Growth/Enterprise]
+- **Website**: 
+- **Headquarters**: 
+
+### Value Proposition
+- **Core Offering**: 
+  > What does the company do? What products/services do they provide?
+
+- **Target Market**: 
+  > Who do they serve? What industries/segments?
+
+- **Unique Differentiators**: 
+  > What makes this company different from competitors?
+
+- **Key Benefits**: 
+  > What outcomes do customers achieve?
+
+---
+
+## 🎯 PRODUCT/SERVICE TO OFFER
+
+### Product Details
+- **Product/Service Name**: 
+- **Category**: [Software/Service/Hardware/Consulting/Other]
+- **Primary Use Case**: 
+  > What problem does this solve? What need does it address?
+
+### Value Proposition
+- **Key Features**: 
+  - Feature 1: 
+  - Feature 2: 
+  - Feature 3: 
+
+- **Main Benefits**: 
+  - Benefit 1: 
+  - Benefit 2: 
+  - Benefit 3: 
+
+- **Competitive Advantages**: 
+  > Why choose this over alternatives?
+
+### Proof Points
+- **Customer Success Stories**: 
+  > Brief examples of results achieved
+
+- **Key Metrics/Results**: 
+  > Quantified outcomes (e.g., "30% increase in revenue", "50% time savings")
+
+- **Social Proof**: 
+  > Notable clients, case studies, testimonials, awards
+
+---
+
+## 👥 IDEAL CUSTOMER PROFILE (ICP)
+
+### Company Characteristics
+- **Industry/Vertical**: 
+- **Company Size**: 
+  - Employees: [Min-Max]
+  - Revenue: [Min-Max]
+- **Geography**: 
+- **Business Model**: [B2B/B2C/B2B2C]
+- **Stage**: [Startup/Growth/Enterprise]
+
+### Firmographic Signals
+- **Growth Indicators**: 
+  > Recent funding, hiring, expansion, etc.
+
+- **Technology Stack**: 
+  > Tools/platforms they likely use
+
+- **Common Challenges**: 
+  > Problems this ICP typically faces
+
+### Decision Maker Profile
+- **Primary Persona**: 
+  - Title/Role: 
+  - Department: 
+  - Seniority Level: 
+  - Typical Responsibilities: 
+
+- **Secondary Persona(s)**: 
+  - Title/Role: 
+  - Influence Level: 
+
+---
+
+## 🎨 COMMUNICATION STYLE & PREFERENCES
+
+### Tone of Voice
+- **Overall Tone**: [Professional/Consultative/Casual/Direct/Friendly]
+- **Formality Level**: [Very Formal/Business Professional/Conversational/Casual]
+- **Personality Traits**: 
+  > Helpful, data-driven, empathetic, straightforward, etc.
+
+### Messaging Guidelines
+- **DO Use**: 
+  - Specific terminology, phrases, or approaches that work well
+  - Industry-specific language
+  - Value-focused messaging
+
+- **DO NOT Use**: 
+  - Buzzwords or jargon to avoid
+  - Overly salesy language
+  - Topics or approaches that don't resonate
+
+### Message Structure Preferences
+- **Preferred Length**: [Concise/Moderate/Detailed]
+- **Lead With**: [Problem/Solution/Insight/Question]
+- **Include**: [Data/Stories/Questions/Social Proof]
+
+---
+
+## ✅ LEAD QUALIFICATION CRITERIA
+
+### Must-Have Criteria (Mandatory)
+1. **Criterion 1**: 
+   - Why it matters: 
+   - How to verify: 
+
+2. **Criterion 2**: 
+   - Why it matters: 
+   - How to verify: 
+
+3. **Criterion 3**: 
+   - Why it matters: 
+   - How to verify: 
+
+### Nice-to-Have Criteria (Bonus Points)
+- **Growth signals** (recent funding, hiring, expansion)
+- **Technology alignment** (using compatible tools)
+- **Market timing** (recent trigger events)
+- **Relationship capital** (existing connections)
+
+### Disqualifiers (Red Flags)
+- **Automatic Disqualifiers**: 
+  > Conditions that make a lead unsuitable (e.g., wrong industry, too small, using competitor with long contract)
+
+- **Warning Signs**: 
+  > Factors that reduce fit score but don't eliminate completely
+
+### Fit Scoring System
+- **High Fit**: 
+  > Definition: What makes a lead "High" fit?
+  > Action: Immediate outreach, priority follow-up
+
+- **Medium Fit**: 
+  > Definition: What makes a lead "Medium" fit?
+  > Action: Nurture sequence, educate before pitching
+
+- **Low Fit**: 
+  > Definition: What makes a lead "Low" fit?
+  > Action: Disqualify or long-term nurture
+
+---
+
+## 🔌 INTEGRATION STATUS
+
+### Google Sheets
+- **Status**: [Not Configured / Configured / Active]
+- **Last Connected**: 
+- **Active Spreadsheets**: 
+- **Notes**: 
+
+### Email Service
+- **Primary Service**: [Gmail / Resend / Not Selected]
+- **Status**: [Not Configured / Configured / Active]
+- **Daily Limit**: [500 for Gmail / 100 for Resend Free / 50K for Resend Paid]
+- **Current Usage**: 
+- **Last Connected**: 
+- **Notes**: 
+
+### Web Search (Tavily)
+- **Status**: [Active / Issues / Not Configured]
+- **API Limit**: 
+- **Current Usage**: 
+- **Notes**: 
+
+---
+
+## 📊 CAMPAIGN HISTORY & LEARNINGS
+
+### Recent Campaigns
+1. **Campaign Name/Date**: 
+   - Leads Processed: 
+   - High Fit %: 
+   - Key Insight: 
+   - What Worked: 
+   - What Didn't: 
+
+2. **Campaign Name/Date**: 
+   - Leads Processed: 
+   - High Fit %: 
+   - Key Insight: 
+   - What Worked: 
+   - What Didn't: 
+
+### Key Learnings
+- **Best Performing Segments**: 
+  > Which types of leads converted best?
+
+- **Messaging Insights**: 
+  > Which messages got best response rates?
+
+- **Timing Insights**: 
+  > When is best time to reach out?
+
+- **Optimization Opportunities**: 
+  > What should we test or improve next?
+
+---
+
+## 🎯 CURRENT OBJECTIVES
+
+### Active Goals
+- **Primary Goal**: 
+- **Target Metrics**: 
+- **Timeline**: 
+- **Success Criteria**: 
+
+### Next Steps
+- [ ] Action item 1
+- [ ] Action item 2
+- [ ] Action item 3
+
+---
+
+## 📝 ADDITIONAL NOTES
+
+### Special Considerations
+> Any unique circumstances, seasonal factors, or context-specific information
+
+### User Preferences
+> How this user likes to work, communication preferences, decision-making style
+
+### Strategic Context
+> Long-term vision, market positioning, growth strategy
+
+---
+
+## 🔄 LAST UPDATED
+
+- **Date**: 
+- **Updated By**: [Agent/User]
+- **Reason for Update**: 
+- **Changes Made**: 
+
+---
+
+> **Note for Agent**: This working memory is your source of truth for this thread. Always reference and update it to maintain context continuity. When user provides new information, ask: "Should I update your working memory with this new information?" Keep this memory current, accurate, and actionable.
+`;
+
