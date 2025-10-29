@@ -32,6 +32,9 @@ importers:
       googleapis:
         specifier: ^164.1.0
         version: 164.1.0
+      pkce-challenge:
+        specifier: ^5.0.0
+        version: 5.0.0
       resend:
         specifier: ^6.3.0
         version: 6.3.0

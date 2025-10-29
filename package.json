@@ -25,6 +25,7 @@
     "@mastra/mcp": "^0.14.1",
     "@mastra/memory": "^0.15.9",
     "googleapis": "^164.1.0",
+    "pkce-challenge": "^5.0.0",
     "resend": "^6.3.0",
     "zod": "^4.1.12"
   },
