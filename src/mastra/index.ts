@@ -6,9 +6,17 @@ import {
   googleOAuthStartRoute, 
   googleOAuthCallbackRoute 
 } from './auth/google-oauth-routes';
+import { leadResearchWorkflow } from './workflows/lead-research-workflow';
+import { emailDispatchWorkflow } from './workflows/email-dispatch-workflow';
+import { oauthSetupWorkflow } from './workflows/oauth-setup-workflow';
 
 export const mastra = new Mastra({
   agents: { sdrAgent },
+  workflows: { 
+    oauthSetupWorkflow,
+    leadResearchWorkflow,
+    emailDispatchWorkflow,
+  },
   storage: new LibSQLStore({
     url: process.env.DATABASE_URL || 'file:./mastra.db',
   }),

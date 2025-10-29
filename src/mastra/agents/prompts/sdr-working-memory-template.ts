@@ -1,28 +1,61 @@
 /**
- * SDR Agent - MVP Working Memory Template
- * Context storage with OAuth token tracking
+ * SDR Agent - Conversational Working Memory Template
+ * Tracks company info, authentication, and workflow progress
  */
 
-export const sdrWorkingMemoryTemplate = `# SDR Agent - Session Context
+export const sdrWorkingMemoryTemplate = `# SDR Agent - Session Memory
 
-## Google Authentication
-- **Access Token**: [OAuth access token - store here when user provides it]
-- **Token Status**: [Not authenticated / Authenticated]
-- **Last Auth Date**: [Timestamp]
+## 🏢 Company Information
+- **Company Name**: 
+- **Sector/Industry**: 
+- **Company Size**: 
+- **Last Updated**: 
 
-## Active Sheet
-- **Sheet URL**: [Last accessed Google Sheet]
-- **Last Action**: [What was done with the sheet]
-- **Rows Processed**: [Number of rows read/processed]
+## 📦 Product Information
+- **Product Name**: 
+- **Product Description**: 
+- **Ideal Customer Profile**: 
+- **Value Proposition**: 
+- **Communication Tone**: [Professional/Casual/Technical]
 
-## Email Configuration
-- **Service**: Resend API
-- **From Address**: [Configured sender email]
-- **Emails Sent Today**: [Counter]
-- **Last Email Sent**: [Timestamp and recipient]
+## 🔐 Google Authentication
+- **Access Token**: 
+- **Refresh Token**: 
+- **Token Expiry**: 
+- **Authentication Date**: 
+- **Status**: [Not Authenticated / Authenticated / Expired]
 
-## Quick Notes
-- [Any important session information]
+## 📊 Current Workflow State
+- **Active Phase**: [Discovery / OAuth Setup / Lead Research / Email Dispatch / Idle]
+- **Current Spreadsheet URL**: 
+- **Last Workflow Run**: 
+- **Workflow Status**: 
+
+## 📈 Lead Analysis Results
+- **Total Leads Processed**: 
+- **Possible Clients Found**: 
+- **Average Lead Score**: 
+- **Top Lead**: 
+- **Analysis Date**: 
+
+## 📧 Email Campaign Stats
+- **Emails Sent Today**: [0/500]
+- **Total Emails Sent This Session**: 
+- **Success Rate**: 
+- **Last Campaign Date**: 
+- **Last Email Sent To**: 
+
+## 📝 Session Notes
+- **User Preferences**: 
+- **Custom Instructions**: 
+- **Important Context**: 
+
+## 🔄 Conversation State
+- **Discovery Questions Completed**: [Yes/No]
+- **OAuth Completed**: [Yes/No]
+- **First Research Done**: [Yes/No]
+- **First Email Campaign Done**: [Yes/No]
 
 ---
-Last Updated: [Timestamp]`;
+**Session Started**: 
+**Last Activity**: `;

@@ -4,8 +4,10 @@ import { openai } from '@ai-sdk/openai';
 import { sdrSystemPrompt } from './prompts/sdr-system-prompt';
 import { sdrWorkingMemoryTemplate } from './prompts/sdr-working-memory-template';
 import { googleSheetsReaderTool } from '../tools/google-sheets-reader';
-import { emailSenderTool } from '../tools/email-sender';
+import { googleSheetsWriterTool } from '../tools/google-sheets-writer';
+import { gmailSenderTool } from '../tools/gmail-sender';
 import { googleOAuthTool } from '../tools/google-oauth-tool';
+import { tavilyMcp } from '../mcp/tavily-mcp';
 
 /**
  * SDR Agent Configuration
@@ -36,12 +38,14 @@ export const sdrAgent = new Agent({
   id: 'sdr-agent',
   description: 'Sales Development Representative agent specialized in lead analysis and personalized sales communication',
   instructions: sdrSystemPrompt,
-  model: openai('gpt-4o'),
+  model: openai('gpt-5-mini'),
   memory: sdrMemory,
   tools: {
     googleOAuthTool,
     googleSheetsReaderTool,
-    emailSenderTool,
+    googleSheetsWriterTool,
+    gmailSenderTool,
+    ...(await tavilyMcp.getTools()),
   },
   defaultGenerateOptions: {
     maxSteps: 10,
